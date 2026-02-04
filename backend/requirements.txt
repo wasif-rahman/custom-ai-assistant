@@ -1,0 +1,9 @@
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+openai==1.12.0
+python-dotenv==1.0.0
+pydantic==2.10.5
+pyyaml==6.0.1
+# why we create venv
+# what is ymal and why we use it and how to use it and what it read as prompts.yaml
+# yaml is a human readable data serializaation format often use for configuration files 
