@@ -1,0 +1,26 @@
+---
+name: Feature Request
+about: Suggest an idea for this project
+title: "[FEATURE] "
+labels: enhancement
+assignees: ''
+
+---
+
+## Is your feature request related to a problem?
+A clear and concise description of what the problem is.
+
+## Describe the Solution
+A clear and concise description of what you want to happen.
+
+## Describe Alternatives
+A clear and concise description of any alternative solutions or features you've considered.
+
+## Use Case
+Explain the use case or scenario where this feature would be helpful.
+
+## Implementation Suggestion (Optional)
+If you have ideas on how to implement this feature, describe them here.
+
+## Additional Context
+Add any other context, code examples, or references here.

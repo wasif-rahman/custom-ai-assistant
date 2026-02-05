@@ -6,6 +6,7 @@ A modular, configurable AI assistant built with FastAPI and Grok AI, featuring m
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.109.0-green.svg)
 ![Grok](https://img.shields.io/badge/Grok-AI-orange.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
+[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](CONTRIBUTING.md)
 
 ---
 
@@ -86,7 +87,7 @@ pip install -r backend/requirements.txt
 4. Set up environment variables
 ```bash
 # Create .env file in project root
-echo "OPENAI_API_KEY=your_grok_api_key_here" > .env
+echo "Grok_API_KEY=your_grok_api_key_here" > .env
 ```
 
 Note: The variable is named `OPENAI_API_KEY` for compatibility with the OpenAI SDK, but you should use your Grok API key.
@@ -272,13 +273,23 @@ This project follows PEP 8 style guidelines.
 
 ## Contributing
 
-This is a learning project, but suggestions and improvements are welcome.
+This project is open to contributions! We welcome contributions of all kinds:
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+- **New AI Modes**: Add new personality modes to `prompts.yaml` (no coding needed!)
+- **Bug Reports**: Help us find and fix issues
+- **Features**: Suggest and implement new features
+- **Documentation**: Improve docs and examples
+- **Frontend**: Help build the Streamlit UI
+- **Backend**: Work on MongoDB integration, authentication, RAG, etc.
+
+**[📖 Read our Contributing Guide →](CONTRIBUTING.md)**
+
+### Quick Start for Contributors
+
+1. Fork and clone the repo
+2. Check [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines
+3. Look for issues labeled `good first issue` or `help wanted`
+4. Submit a PR - we love reviewing contributions!
 
 ---
 
