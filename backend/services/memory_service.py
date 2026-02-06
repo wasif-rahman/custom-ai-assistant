@@ -1,4 +1,4 @@
-from typing import List, Dict,Optional
+from typing import List, Dict, Optional
 from datetime import datetime
 import uuid
 from config.database import get_db
@@ -11,8 +11,22 @@ class MemoryService:
     """
 
     def __init__(self):
-        self.db = get_db()
-        self.collection =self.db.conversations
+        self._db = None
+        self._collection = None
+    
+    @property
+    def db(self):
+        """Lazy load database on first access"""
+        if self._db is None:
+            self._db = get_db()
+        return self._db
+    
+    @property
+    def collection(self):
+        """Lazy load collection on first access"""
+        if self._collection is None:
+            self._collection = self.db.conversations
+        return self._collection
 
 
     async def create_conversation(self, mode: str = "default") -> str:
@@ -35,7 +49,7 @@ class MemoryService:
         message = {
             "role": role,
             "content": content,
-            "timestamp": datetime.utcno
+            "timestamp": datetime.utcnow()
         }
         
         # Update messages array and updated_at timestamp
@@ -47,46 +61,44 @@ class MemoryService:
             }
         )
 
-
         # if convo doesn't exist
-        if result.matched_count ==0:
+        if result.matched_count == 0:
             await self.create_conversation()
-            await self.add_message(conversation_id,role,content)
-
+            await self.add_message(conversation_id, role, content)
         
         # Auto generate conversation name
-        await self._update_title_if_needed(conversation_id,content,role)
+        await self._update_title_if_needed(conversation_id, content, role)
 
-
-        async def _update_title_if_needed(self,conversation_id:str, content : str , role :str ):
-            """Generate conversation title based on first user message"""
+    async def _update_title_if_needed(self, conversation_id: str, content: str, role: str):
+        """Generate conversation title based on first user message"""
         if role == "user":
             conversation = await self.collection.find_one({"conversation_id": conversation_id})
             if conversation and not conversation.get("title"):
-                title = content[:50] + ("... "if len(content)>50 else"")
+                title = content[:50] + ("..." if len(content) > 50 else "")
                 await self.collection.update_one(
-                    {"conversation_id":conversation_id},
-                    {"$set":{"title" : title}}
+                    {"conversation_id": conversation_id},
+                    {"$set": {"title": title}}
                 )
-        async def get_convesation(self, conversation_id:str, last_n: int=10) -> List[Dict[str,str]]:
-            """Get conversation history
-             Args:
-              conversation_id :which conversation 
-              Returns: 
-              List of messages (role + content onlly  without timestamps)
-              """
-            conversation = await self.collection.find_one({"conversation_id": conversation_id})
+    
+    async def get_conversation(self, conversation_id: str, last_n: int = 10) -> List[Dict[str, str]]:
+        """Get conversation history
+        Args:
+            conversation_id: which conversation 
+        Returns: 
+            List of messages (role + content only without timestamps)
+        """
+        conversation = await self.collection.find_one({"conversation_id": conversation_id})
         
-            if not conversation:
-                return[]
-            messages = conversation.get("messages",[])
-            recent_messages = messages[-last_n:] if len(messages) > last_n else messages
+        if not conversation:
+            return []
+        messages = conversation.get("messages", [])
+        recent_messages = messages[-last_n:] if len(messages) > last_n else messages
         
         # Return in format expected by AI service (without timestamps)
-            return [
-                 {"role": msg["role"], "content": msg["content"]}
-                for msg in recent_messages
-              ]
+        return [
+            {"role": msg["role"], "content": msg["content"]}
+            for msg in recent_messages
+        ]
     
     async def get_all_conversations(self, limit: int = 50) -> List[Dict]:
         """

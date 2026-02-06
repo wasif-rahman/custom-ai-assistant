@@ -51,7 +51,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize services
+# Initialize services (lazy loading - database only connects when first used)
 ai_service = AIService()
 memory_service = MemoryService()
 
@@ -98,16 +98,16 @@ async def chat(request: ChatRequest):
 async def list_conversation(limit: int = 50):
     """Get list of all the conversations"""
     try:
-        conversation = await memory_service.get_allconversation
-        return {"conversations": conversation, "count": len(conversation)}
+        conversations = await memory_service.get_all_conversations(limit)
+        return {"conversations": conversations, "count": len(conversations)}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/conversation/{conversation_id}")
-async def get_conversation(coversation_id: str):
+async def get_conversation(conversation_id: str):
     """Get full conversation"""
     try:
-        conversation = await memory_service.get_conversation_detail(coversation_id)
+        conversation = await memory_service.get_conversation_detail(conversation_id)
         if not conversation :
             raise HTTPException(status_code=404,detail="Conversation not found")
         return conversation
