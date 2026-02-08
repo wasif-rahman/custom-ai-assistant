@@ -406,18 +406,3 @@ with col2:
     else:
         st.info("No conversations yet. Start chatting to create one!")
 
-# Footer
-st.divider()
-col_x, col_y, col_z = st.columns(3)
-
-with col_x:
-    st.metric("Total Conversations", len(st.session_state.all_conversations))
-
-with col_y:
-    total_messages = sum(c.get("message_count", 0) for c in st.session_state.all_conversations)
-    st.metric("Total Messages", total_messages)
-
-with col_z:
-    st.metric("Active Mode", st.session_state.mode.title())
-
-st.caption("Built with FastAPI + Grok AI + MongoDB + Streamlit | v2.0")
